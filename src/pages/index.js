@@ -17,12 +17,9 @@ const Home = () => {
         <link rel='canonical' href='https://www.cryptaops.it/' />
       </Head>
 
-      <header className='w-screen sticky top-0'>
-        <LoggedOutNavbar />
-      </header>
       <main className='flex flex-col w-screen h-screen p-2'>
-        <div className='bg-green-300 w-full h-full'> sa dsadad</div>
-ß      </main>
+        <div className='bg-green-300 w-full h-full'> sa dsadad</div>ß{' '}
+      </main>
     </>
   );
 };
