@@ -1,38 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center" id="title">CryptaOps</h1>
 
-## Getting Started
+<p id="description">This is CryptaOps the latest cryptocurrencies exchange simulator. Here you can try how this world works. You can charge your portfolio with CryptaCoins to buy new crypto in order to learn how to do transaction in a totally safe place.</p>
 
-First, run the development server:
+  
+  
+<h2>🧐 Features</h2>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+Here're some of the project's best features:
+
+*   Real-time prices
+*   1K CryptaCoins in your portfolio
+*   Real blockchain algorithm
+
+<h2>🛠️ Installation Steps:</h2>
+
+<p>1. Download the repo at</p>
+
+```
+https://github.com/fabiobonati/crypta-ops.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<p>2. Install all packages and dependencies</p>
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```
+npm install
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+<p>3. Compile and run the code</p>
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+  
+  
+<h2>💻 Built with</h2>
 
-## Learn More
+Technologies used in the project:
 
-To learn more about Next.js, take a look at the following resources:
+*   Next.js
+*   TailwindCSS
+*   MySQL
+*   Axios
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<h2>💖Like our work?</h2>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Write us an email at: bonatifabio.dev@gmail.com or cividini.diego.dev@gmail.com
