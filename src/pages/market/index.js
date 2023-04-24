@@ -24,7 +24,7 @@ const Market = () => {
   const itemsToShow = cryptoData.slice(startIndex, endIndex);
   return (
     <>
-      <div className='flex flex-col justify-center w-full items-center m-6'>
+      <div className='flex flex-col justify-center w-full mx-auto items-center m-6 p-2'>
         <table className='bg-gray-50 rounded-xl p-4 text-center'>
           <thead className='text-center'>
             <tr className='text-center'>
@@ -89,7 +89,9 @@ const Market = () => {
               <button
                 key={pageNumber}
                 className={`mx-2 px-4 py-2 rounded-full ${
-                  currentPage === pageNumber ? 'bg-pink-400 text-white' : ''
+                  currentPage === pageNumber
+                    ? 'bg-pink-400 text-white'
+                    : 'hover:bg-gray-200'
                 }`}
                 onClick={() => setCurrentPage(pageNumber)}
               >
