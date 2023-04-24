@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Market = () => {
   const [cryptoData, setCryptoData] = useState([]);
@@ -16,6 +17,11 @@ const Market = () => {
     };
     fetchMarketData();
   }, []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = cryptoData.length / 10;
+  const startIndex = (currentPage - 1) * 10;
+  const endIndex = startIndex + 10;
+  const itemsToShow = cryptoData.slice(startIndex, endIndex);
   return (
     <>
       <div className='flex flex-col justify-center w-full items-center m-6'>
@@ -31,8 +37,12 @@ const Market = () => {
             </tr>
           </thead>
           <tbody>
-            {cryptoData.map((cryptoData, index) => (
-              <tr key={index} className='border-t-2 border-gray-200'>
+            {itemsToShow.map((cryptoData, index) => (
+              <tr
+                key={index}
+                className='border-t-2 border-gray-200 hover:bg-gray-100'
+                data-href='/'
+              >
                 <td className='p-4 capitalize'>
                   <div className='flex flex-row text-left'>
                     <Image
@@ -73,6 +83,21 @@ const Market = () => {
             ))}
           </tbody>
         </table>
+        <div className='flex justify-center mt-4'>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+            (pageNumber) => (
+              <button
+                key={pageNumber}
+                className={`mx-2 px-4 py-2 rounded-full ${
+                  currentPage === pageNumber ? 'bg-pink-400 text-white' : ''
+                }`}
+                onClick={() => setCurrentPage(pageNumber)}
+              >
+                {pageNumber}
+              </button>
+            )
+          )}
+        </div>
       </div>
     </>
   );
