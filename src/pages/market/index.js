@@ -39,7 +39,7 @@ const Market = () => {
             </thead>
             <tbody>
               {itemsToShow.map((cryptoData, index) => (
-                <tr key={index} className=' hover:bg-gray-100' data-href='/'>
+                <tr key={index} className=' hover:bg-gray-100'>
                   <td className='p-4 capitalize'>
                     <div className='flex flex-row text-left'>
                       <Image
@@ -50,8 +50,14 @@ const Market = () => {
                         className='mr-2'
                       />
                       <div>
-                        <p className='font-medium'>{cryptoData.id}</p>
-                        <p className='text-gray-500'>{cryptoData.symbol}</p>
+                        <Link
+                          href={`/market/${encodeURIComponent(
+                            cryptoData.symbol
+                          )}`}
+                        >
+                          <p className='font-medium'>{cryptoData.id}</p>
+                          <p className='text-gray-500'>{cryptoData.symbol}</p>
+                        </Link>
                       </div>
                     </div>
                   </td>
