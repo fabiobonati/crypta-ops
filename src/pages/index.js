@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
-import LoggedOutNavbar from '@/components/Navbar/LoggedOutNavbar';
+import { useSession, signIn, signOut } from 'next-auth/react';
+
 const Home = () => {
   return (
     <>
@@ -18,7 +19,9 @@ const Home = () => {
       </Head>
 
       <main className='flex flex-col w-screen h-screen p-2'>
-        <div className='bg-green-300 w-full h-full'> sa dsadad</div>ß{' '}
+        <div className='bg-green-300 w-full h-full'>
+          <button onClick={() => signIn()}>Sign in</button> 
+        </div>
       </main>
     </>
   );

@@ -5,10 +5,10 @@ import Link from 'next/link';
 const Market = () => {
   const [cryptoData, setCryptoData] = useState([]);
   useEffect(() => {
-    let requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-    };
+    // let requestOptions = {
+    //   method: 'GET',
+    //   redirect: 'follow',
+    // };
     const fetchMarketData = async () => {
       const response = await fetch('https://api.coincap.io/v2/assets')
         .then((response) => response.json())
