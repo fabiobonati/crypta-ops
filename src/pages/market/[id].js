@@ -26,8 +26,35 @@ import { Line } from 'react-chartjs-2';
 const MarketData = () => {
   const router = useRouter();
   const { id } = router.query;
+  const [ID, setID] = useState('');
   const [cryptoData, setCryptoData] = useState([]);
-
+  const [selectedCrypto, setSelectedCrypto] = useState('default');
+  useEffect(() => {
+    if (router.isReady) {
+      // Code using query
+      console.log(id);
+      // this will set the state before component is mounted
+      setID(id);
+    }
+  }, [router.isReady, id]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(
+        `https://api.coincap.io/v2/assets/${id}/history?interval=m1`
+      );
+      const data = await res.json();
+      setCryptoData(data.data);
+    };
+    fetchData();
+  }, [id]);
+  useEffect(() => {
+    const fetchCryptoData = async () => {
+      const res = await fetch(`https://api.coincap.io/v2/assets/${ID}`);
+      const data = await res.json();
+      setSelectedCrypto(data.data);
+    };
+    fetchCryptoData();
+  }, [ID]);
   const data = {
     labels: cryptoData.map(
       (data) =>
@@ -60,21 +87,11 @@ const MarketData = () => {
       ],
     },
   };
-  console.log(id);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(
-        `https://api.coincap.io/v2/assets/${id}/history?interval=m1`
-      );
-      const data = await res.json();
-      setCryptoData(data.data);
-    };
-    fetchData();
-  }, [id]);
 
   return (
     <div className="p-6">
+      <h1 className="text-2xl font-bold">{selectedCrypto.name}</h1>
+      <h1>{selectedCrypto.symbol}</h1>
       <Line
         data={data}
         width={200}
