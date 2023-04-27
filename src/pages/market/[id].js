@@ -29,20 +29,27 @@ const MarketData = () => {
   const [cryptoData, setCryptoData] = useState([]);
 
   const data = {
-    labels: cryptoData.map((data) =>
-      new Date(data.date).toLocaleDateString('it-IT')
+    labels: cryptoData.map(
+      (data) =>
+        `${new Date(data.date).getHours()}:${new Date(data.date).getMinutes()}`
     ),
     datasets: [
       {
         label: 'Price',
         data: cryptoData.map((data) => data.priceUsd),
         fill: true,
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        borderColor: 'rgba(75,192,192,1)',
+        backgroundColor: 'rgba(255, 215, 0, 0.2)',
+        borderColor: 'rgba(255, 215, 0, 0.9)',
       },
     ],
   };
   const options = {
+    responsive: true,
+    elements: {
+      point: {
+        radius: 0,
+      },
+    },
     scales: {
       yAxes: [
         {
@@ -64,9 +71,19 @@ const MarketData = () => {
       setCryptoData(data.data);
     };
     fetchData();
-  }, []);
+  }, [id]);
 
-  return <Line data={data} width={100} height={40} options={options} />;
+  return (
+    <div className="p-6">
+      <Line
+        data={data}
+        width={200}
+        height={100}
+        options={options}
+        className="w-full h-full"
+      />
+    </div>
+  );
 };
 
 export default MarketData;
