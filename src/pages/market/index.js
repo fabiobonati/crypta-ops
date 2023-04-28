@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Market = () => {
   const [cryptoData, setCryptoData] = useState([]);
@@ -61,6 +62,7 @@ const Market = () => {
   const startIndex = (currentPage - 1) * 10;
   const endIndex = startIndex + 10;
   const itemsToShow = cryptoData.slice(startIndex, endIndex);
+  const router = useRouter();
   return (
     <>
       <div className="flex flex-col justify-center w-full container p-2 mx-auto items-center">
@@ -78,7 +80,11 @@ const Market = () => {
             </thead>
             <tbody>
               {itemsToShow.map((cryptoData, index) => (
-                <tr key={index} className=" hover:bg-gray-100">
+                <tr
+                  key={index}
+                  className=" hover:bg-gray-100 hover:cursor-pointer"
+                  onClick={() => router.push(`/market/${cryptoData.id}`)}
+                >
                   <td className="p-4 capitalize">
                     <div className="flex flex-row text-left">
                       <Image
@@ -95,12 +101,8 @@ const Market = () => {
                         className="mr-2"
                       />
                       <div>
-                        <Link
-                          href={`/market/${encodeURIComponent(cryptoData.id)}`}
-                        >
-                          <p className="font-medium">{cryptoData.id}</p>
-                          <p className="text-gray-500">{cryptoData.symbol}</p>
-                        </Link>
+                        <p className="font-medium">{cryptoData.id}</p>
+                        <p className="text-gray-500">{cryptoData.symbol}</p>
                       </div>
                     </div>
                   </td>
