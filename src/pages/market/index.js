@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 
 const Market = () => {
   const [cryptoData, setCryptoData] = useState([]);
-  const [imageSrc, setImageSrc] = useState('');
   const symbolsArray = [
     'steth',
     'busd',
@@ -92,8 +91,8 @@ const Market = () => {
                           !symbolsArray.includes(
                             cryptoData.symbol.toLowerCase()
                           )
-                            ? `/color/${cryptoData.symbol.toLowerCase()}.svg`
-                            : `/color/generic.svg`
+                            ? `/cryptoLogo/${cryptoData.symbol.toLowerCase()}.svg`
+                            : `/cryptoLogo/generic.svg`
                         }
                         width={36}
                         height={36}
