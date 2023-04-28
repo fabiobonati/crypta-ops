@@ -4,6 +4,49 @@ import Link from 'next/link';
 
 const Market = () => {
   const [cryptoData, setCryptoData] = useState([]);
+  const [imageSrc, setImageSrc] = useState('');
+  const symbolsArray = [
+    'steth',
+    'busd',
+    'shib',
+    'okb',
+    'cro',
+    'ldo',
+    'near',
+    'btcb',
+    'ftm',
+    'egld',
+    'usdp',
+    'flow',
+    'cfx',
+    'axs',
+    'rpl',
+    'hbar',
+    'rndr',
+    'klay',
+    'inj',
+    'mina',
+    'fxs',
+    'cspr',
+    'xec',
+    'gt',
+    'cake',
+    'ftt',
+    'woo',
+    'twt',
+    'xdc',
+    'rune',
+    'agix',
+    'kava',
+    'dydx',
+    'cvx',
+    'fei',
+    'rose',
+    'mask',
+    'dfi',
+    'audio',
+    'tfuel',
+  ];
   useEffect(() => {
     const fetchMarketData = async () => {
       const response = await fetch('https://api.coincap.io/v2/assets')
@@ -39,7 +82,13 @@ const Market = () => {
                   <td className="p-4 capitalize">
                     <div className="flex flex-row text-left">
                       <Image
-                        src={'/logo.png'}
+                        src={
+                          !symbolsArray.includes(
+                            cryptoData.symbol.toLowerCase()
+                          )
+                            ? `/color/${cryptoData.symbol.toLowerCase()}.svg`
+                            : `/color/generic.svg`
+                        }
                         width={36}
                         height={36}
                         alt={cryptoData.id}
