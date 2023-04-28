@@ -51,7 +51,7 @@ const Footer = () => {
               />
               <FaEnvelope
                 className='text-gray-500 hover:text-gray-800'
-                href=''
+                href='mailto:dev@cryptaops.it?body:Ciao'
               />
             </div>
           </div>

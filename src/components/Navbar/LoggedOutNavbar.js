@@ -56,13 +56,13 @@ const LoggedOutNavbar = () => {
                   className='group text-black transition-all duration-200 ease-in-out'
                 >
                   <span className='pb-1 bg-left-bottom bg-gradient-to-r from-pink-500 to-pink-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-200 ease-out'>
-                    Login
+                    Sign in
                   </span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href='/'
+                  href='/auth/signup'
                   className='text-white bg-pink-500 rounded-full py-2 px-4 hover:bg-pink-600'
                 >
                   Sign Up

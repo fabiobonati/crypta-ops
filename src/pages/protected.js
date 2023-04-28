@@ -1,4 +1,5 @@
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 const Protected = () => {
   const session = useSession();
@@ -7,7 +8,7 @@ const Protected = () => {
     return <p>Signed in</p>;
   }
 
-  return <a href='/api/auth/signin'>Sign in</a>;
+  return <Link href='/api/auth/signin'>Sign in</Link>;
 };
 
 export default Protected;
