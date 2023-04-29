@@ -13,6 +13,8 @@ import {
   Filler,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 ChartS.register(
   CategoryScale,
   LinearScale,
@@ -76,9 +78,7 @@ const MarketData = () => {
   const [selectedInterval, setSelectedInterval] = useState(1);
   useEffect(() => {
     if (router.isReady) {
-      // Code using query
       console.log(id);
-      // this will set the state before component is mounted
       setID(id);
     }
   }, [router.isReady, id]);
@@ -104,7 +104,7 @@ const MarketData = () => {
   }, [id]);
 
   useEffect(() => {
-    let isMounted = true; // flag to track component mount state
+    let isMounted = true;
 
     async function fetchCryptoData() {
       try {
@@ -168,9 +168,30 @@ const MarketData = () => {
     },
   };
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-6 lg:p-10">
+        <div className="flex flex-col justify-center lg:flex-row lg:justify-between mb-6">
+          <div className="flex flex-row justify-center lg:justify-normal w-full lg:w-auto text-xl">
+            <div className="flex flex-col justify-center">
+              <Skeleton width={75} height={57} widthclassName="mr-6 lg:mr-2" />
+            </div>
+            <div className="flex flex-col gap-2 ml-6">
+              <Skeleton height={30} width={100} />
+              <Skeleton height={30} width={100} />
+            </div>
+          </div>
+          <div className="flex flex-col ml-4 gap-2 items-center">
+            <Skeleton height={30} width={100} />
+            <Skeleton height={30} width={100} />
+          </div>
+          <div className="flex flex-col align-middle justify-center gap-2 w-full lg:w-auto">
+            <Skeleton height={30} width={100} />
+          </div>
+        </div>
+        <Skeleton height={500} />
+      </div>
+    );
   }
-
   return (
     <div className="p-6 lg:p-10">
       <div className="flex flex-col justify-center lg:flex-row lg:justify-between mb-6">
