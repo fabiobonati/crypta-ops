@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const Market = () => {
   const [cryptoData, setCryptoData] = useState([]);
@@ -47,12 +49,15 @@ const Market = () => {
     'audio',
     'tfuel',
   ];
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
+    setIsLoading(true);
     const fetchMarketData = async () => {
       const response = await fetch('https://api.coincap.io/v2/assets')
         .then((response) => response.json())
         .catch((error) => console.log('error', error));
       setCryptoData(response.data);
+      setIsLoading(false);
     };
     fetchMarketData();
   }, []);
@@ -62,13 +67,22 @@ const Market = () => {
   const endIndex = startIndex + 10;
   const itemsToShow = cryptoData.slice(startIndex, endIndex);
   const router = useRouter();
+
+  if (isLoading) {
+    console.log('loading');
+    return (
+      <div className="flex flex-col justify-center w-2/3 h-full m-auto">
+        <Skeleton height={400} />
+      </div>
+    );
+  }
   return (
     <>
       <div className="flex flex-col justify-center w-full container p-2 mx-auto items-center">
         <div className="border-2 rounded-lg border-gray-100">
           <table className="text-center mx-auto w-full">
             <thead className="hidden border-b-2 border-gray-200 sm:table-header-group">
-              <tr className="text-center">
+              <tr className="text-center w-full min-w-full">
                 <th className="p-4 text-left">Name</th>
                 <th className="p-4">Price</th>
                 <th className="p-4">Trend 24h</th>
