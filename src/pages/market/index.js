@@ -48,6 +48,7 @@ const Market = () => {
     'dfi',
     'audio',
     'tfuel',
+    'celo',
   ];
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -71,35 +72,35 @@ const Market = () => {
   if (isLoading) {
     console.log('loading');
     return (
-      <div className="flex flex-col justify-center w-2/3 h-full m-auto">
+      <div className='flex flex-col justify-center w-2/3 h-full m-auto'>
         <Skeleton height={400} />
       </div>
     );
   }
   return (
     <>
-      <div className="flex flex-col justify-center w-full container p-2 mx-auto items-center">
-        <div className="border-2 rounded-lg border-gray-100">
-          <table className="text-center mx-auto w-full">
-            <thead className="hidden border-b-2 border-gray-200 sm:table-header-group">
-              <tr className="text-center w-full min-w-full">
-                <th className="p-4 text-left">Name</th>
-                <th className="p-4">Price</th>
-                <th className="p-4">Trend 24h</th>
-                <th className="p-4">Market Cap</th>
-                <th className="p-4">Volume</th>
-                <th className="p-4 hidden md:table-cell">Last 7 Days</th>
+      <div className='flex flex-col justify-center w-full container p-2 mx-auto items-center'>
+        <div className='border-2 rounded-lg border-gray-100'>
+          <table className='text-center mx-auto w-full'>
+            <thead className='hidden border-b-2 border-gray-200 sm:table-header-group'>
+              <tr className='text-center w-full min-w-full'>
+                <th className='p-4 text-left'>Name</th>
+                <th className='p-4'>Price</th>
+                <th className='p-4'>Trend 24h</th>
+                <th className='p-4'>Market Cap</th>
+                <th className='p-4'>Volume</th>
+                <th className='p-4 hidden md:table-cell'>Last 7 Days</th>
               </tr>
             </thead>
             <tbody>
               {itemsToShow.map((cryptoData, index) => (
                 <tr
                   key={index}
-                  className=" hover:bg-gray-100 hover:cursor-pointer"
+                  className=' hover:bg-gray-100 hover:cursor-pointer'
                   onClick={() => router.push(`/market/${cryptoData.id}`)}
                 >
-                  <td className="p-4 capitalize">
-                    <div className="flex flex-row text-left">
+                  <td className='p-4 capitalize'>
+                    <div className='flex flex-row text-left'>
                       <Image
                         src={
                           !symbolsArray.includes(
@@ -111,15 +112,15 @@ const Market = () => {
                         width={36}
                         height={36}
                         alt={cryptoData.id}
-                        className="mr-2"
+                        className='mr-2'
                       />
                       <div>
-                        <p className="font-medium">{cryptoData.id}</p>
-                        <p className="text-gray-500">{cryptoData.symbol}</p>
+                        <p className='font-medium'>{cryptoData.id}</p>
+                        <p className='text-gray-500'>{cryptoData.symbol}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="p-4">
+                  <td className='p-4'>
                     ${parseFloat(cryptoData.priceUsd).toFixed(2)}
                   </td>
                   <td
@@ -131,13 +132,13 @@ const Market = () => {
                   >
                     {parseFloat(cryptoData.changePercent24Hr).toFixed(2)}%
                   </td>
-                  <td className="p-4 hidden sm:table-cell">
+                  <td className='p-4 hidden sm:table-cell'>
                     ${parseFloat(cryptoData.marketCapUsd).toFixed(2)}
                   </td>
-                  <td className="p-4 hidden sm:table-cell">
+                  <td className='p-4 hidden sm:table-cell'>
                     ${parseFloat(cryptoData.volumeUsd24Hr).toFixed(2)}
                   </td>
-                  <td className="p-4 hidden md:table-cell">
+                  <td className='p-4 hidden md:table-cell'>
                     ${parseFloat(cryptoData.vwap24Hr).toFixed(2)}
                   </td>
                 </tr>
@@ -145,7 +146,7 @@ const Market = () => {
             </tbody>
           </table>
         </div>
-        <div className="flex justify-center mt-4">
+        <div className='flex justify-center mt-4'>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map(
             (pageNumber) => (
               <button

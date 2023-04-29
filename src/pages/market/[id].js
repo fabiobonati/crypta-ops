@@ -66,6 +66,7 @@ const symbolsArray = [
   'dfi',
   'audio',
   'tfuel',
+  'celo',
 ];
 
 const MarketData = () => {
@@ -169,22 +170,22 @@ const MarketData = () => {
   };
   if (isLoading) {
     return (
-      <div className="p-6 lg:p-10">
-        <div className="flex flex-col justify-center lg:flex-row lg:justify-between mb-6">
-          <div className="flex flex-row justify-center lg:justify-normal w-full lg:w-auto text-xl">
-            <div className="flex flex-col justify-center">
-              <Skeleton width={75} height={57} widthclassName="mr-6 lg:mr-2" />
+      <div className='p-6 lg:p-10'>
+        <div className='flex flex-col justify-center lg:flex-row lg:justify-between mb-6'>
+          <div className='flex flex-row justify-center lg:justify-normal w-full lg:w-auto text-xl'>
+            <div className='flex flex-col justify-center'>
+              <Skeleton width={75} height={57} widthclassName='mr-6 lg:mr-2' />
             </div>
-            <div className="flex flex-col gap-2 ml-6">
+            <div className='flex flex-col gap-2 ml-6'>
               <Skeleton height={30} width={100} />
               <Skeleton height={30} width={100} />
             </div>
           </div>
-          <div className="flex flex-col ml-4 gap-2 items-center">
+          <div className='flex flex-col ml-4 gap-2 items-center'>
             <Skeleton height={30} width={100} />
             <Skeleton height={30} width={100} />
           </div>
-          <div className="flex flex-col align-middle justify-center gap-2 w-full lg:w-auto">
+          <div className='flex flex-col align-middle justify-center gap-2 w-full lg:w-auto'>
             <Skeleton height={30} width={100} />
           </div>
         </div>
@@ -193,10 +194,10 @@ const MarketData = () => {
     );
   }
   return (
-    <div className="p-6 lg:p-10">
-      <div className="flex flex-col justify-center lg:flex-row lg:justify-between mb-6">
-        <div className="flex flex-row justify-center lg:justify-normal w-full lg:w-auto text-xl">
-          <div className="flex flex-col justify-center">
+    <div className='p-6 lg:p-10'>
+      <div className='flex flex-col justify-center lg:flex-row lg:justify-between mb-6'>
+        <div className='flex flex-row justify-center lg:justify-normal w-full lg:w-auto text-xl'>
+          <div className='flex flex-col justify-center'>
             <Image
               src={
                 !symbolsArray.includes(crypto.symbol.toLowerCase())
@@ -206,32 +207,32 @@ const MarketData = () => {
               width={75}
               height={57}
               alt={cryptoData.id}
-              className="mr-6 lg:mr-2"
+              className='mr-6 lg:mr-2'
             />
           </div>
-          <div className="flex flex-col gap-2 ml-6">
-            <h1 className="text-2xl font-bold mt-4">{crypto.name}</h1>
-            <h2 className="mb-5">{crypto.symbol}</h2>
+          <div className='flex flex-col gap-2 ml-6'>
+            <h1 className='text-2xl font-bold mt-4'>{crypto.name}</h1>
+            <h2 className='mb-5'>{crypto.symbol}</h2>
           </div>
         </div>
-        <div className="flex flex-col ml-4 gap-2 items-center">
-          <h1 className="text-2xl font-bold mt-4">
+        <div className='flex flex-col ml-4 gap-2 items-center'>
+          <h1 className='text-2xl font-bold mt-4'>
             ${parseFloat(crypto.priceUsd).toFixed(2)}
           </h1>
-          <h2 className="mb-5">
+          <h2 className='mb-5'>
             {crypto.changePercent24Hr > 0 ? (
-              <span className="text-green-500">
+              <span className='text-green-500'>
                 {parseFloat(crypto.changePercent24Hr).toFixed(2)}%
               </span>
             ) : (
-              <span className="text-red-500">
+              <span className='text-red-500'>
                 {parseFloat(crypto.changePercent24Hr).toFixed(2)}%
               </span>
             )}
           </h2>
         </div>
-        <div className="flex flex-col align-middle justify-center gap-2 w-full lg:w-auto">
-          <button className="bg-pink-500 hover:bg-pink-600 text-white p-4 rounded-full mb-6 lg:mb-0">
+        <div className='flex flex-col align-middle justify-center gap-2 w-full lg:w-auto'>
+          <button className='bg-pink-500 hover:bg-pink-600 text-white p-4 rounded-full mb-6 lg:mb-0'>
             Buy now!
           </button>
         </div>
@@ -241,9 +242,9 @@ const MarketData = () => {
         width={200}
         height={75}
         options={options}
-        className="w-full h-full"
+        className='w-full h-full'
       />
-      <div className="flex flex-row justify-around gap-4 text-white mt-6">
+      <div className='flex flex-row justify-around gap-4 text-white mt-6'>
         <button
           onClick={() => fetchDataInterval(id, 'm1', 1)}
           className={`p-4 bg-pink-500 hover:bg-pink-600 rounded-full w-full h-full ${
