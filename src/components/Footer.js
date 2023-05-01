@@ -4,8 +4,8 @@ import { FaDiscord, FaInstagram, FaTelegram, FaEnvelope } from 'react-icons/fa';
 const Footer = () => {
   return (
     <footer className='p-6 mt-12 bg-gray-50'>
-      <div className='flex flex-col items-center'>
-        <div className='flex flex-row space-x-24'>
+      <div className='flex flex-col sm:items-center'>
+        <div className='flex flex-col sm:flex-row space-y-6 sm:space-y-0 sm:space-x-24'>
           <div>
             <p className='font-medium text-xl'>About us</p>
             <ul className='text-gray-500 space-y-1 mt-3'>
@@ -56,11 +56,9 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <hr className='w-1/2 h-px mx-auto my-6 bg-gray-300 border-0' />
-        <div className='flex flex-col items-center text-center'>
-          <p>
-            Made with ❤️ by <strong>CryptaOps</strong> Team
-          </p>
+        <hr className='w-full h-px mx-auto my-6 bg-gray-300 border-0' />
+        <div className='flex flex-col items-center text-center text-gray-400 font-normal'>
+          <p>CryptaOps © 2023</p>
         </div>
       </div>
     </footer>
