@@ -94,7 +94,7 @@ const LoggedOutNavbar = () => {
             <ul className='mx-auto items-center justify-center  md:justify-end flex flex-row gap-4 md:space-x-6 md:space-y-0'>
               <li>
                 <Link
-                  href='/'
+                  href='/auth/signin'
                   className='group  text-black transition-all duration-200 ease-in-out text-center bg-gray-100 hover:bg-gray-200 md:bg-transparent md:hover:bg-transparent rounded-full py-2 px-4'
                 >
                   <span className='hidden md:block pb-1 bg-left-bottom bg-gradient-to-r from-pink-500 to-pink-500 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-200 ease-out'>
