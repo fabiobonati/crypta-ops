@@ -42,7 +42,7 @@ const SignUpForm = () => {
                   id='grid-first-name'
                   type='text'
                   placeholder='First Name'
-                  {...register('name')}
+                  {...register('name', { required: true })}
                 />
               </div>
               <div className='w-full px-3'>
@@ -51,7 +51,7 @@ const SignUpForm = () => {
                   id='grid-last-name'
                   type='text'
                   placeholder='Last Name'
-                  {...register('surname')}
+                  {...register('surname', { required: true })}
                 />
               </div>
             </div>
@@ -62,7 +62,7 @@ const SignUpForm = () => {
                   id='grid-email'
                   type='email'
                   placeholder='Email'
-                  {...register('email')}
+                  {...register('email', { required: true })}
                 />
               </div>
             </div>
@@ -73,7 +73,7 @@ const SignUpForm = () => {
                   id='grid-password'
                   type='password'
                   placeholder='Password'
-                  {...register('password')}
+                  {...register('password', { required: true })}
                 />
               </div>
             </div>
@@ -98,7 +98,6 @@ const SignUpForm = () => {
             </div>
           </form>
         </div>
-
         <p className='mt-2 text-sm text-center text-gray-600'>
           Already have an account?{' '}
           <Link
