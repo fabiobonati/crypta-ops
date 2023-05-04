@@ -18,6 +18,7 @@ export const authOptions = {
     sameSite: 'strict',
     path: '/',
     maxAge: 24 * 60 * 60 * 30, // 30 days
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -51,11 +52,10 @@ export const authOptions = {
     }),
   ],
   secret: process.env.SECRET,
-  //baseUrl: process.env.NEXTAUTH_URL,
+  baseUrl: process.env.NEXTAUTH_URL,
   pages: {
     signIn: 'auth/signin',
   },
-
 };
 
 export default NextAuth(authOptions);
