@@ -8,7 +8,6 @@ console.log(process.env.NEXTAUTH_SECRET);
 export const authOptions = {
   session: {
     jwt: true,
-    maxAge: 30 * 24 * 60 * 60,
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -42,11 +41,10 @@ export const authOptions = {
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
-  baseUrl: process.env.NEXTAUTH_URL,
   pages: {
     signIn: 'auth/signin',
   },
+  secret: process.env.SECRET,
 };
-console.log(authOptions.secret);
+
 export default NextAuth(authOptions);
