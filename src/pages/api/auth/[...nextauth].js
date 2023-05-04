@@ -9,7 +9,7 @@ export const authOptions = {
     strategy: 'jwt',
   },
   jwt: {
-    secret: process.env.JWT_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -43,7 +43,6 @@ export const authOptions = {
       },
     }),
   ],
-  secret: process.env.SECRET,
   baseUrl: process.env.NEXTAUTH_URL,
   pages: {
     signIn: 'auth/signin',
