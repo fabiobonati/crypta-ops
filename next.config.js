@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
 
-module.exports = nextConfig
+const nextConfig = {
+  images: {
+    domains: ['assets.coingecko.com', 'cryptoicons.org'],
+  },
+  reactStrictMode: true,
+};
+
+module.exports = nextConfig;
