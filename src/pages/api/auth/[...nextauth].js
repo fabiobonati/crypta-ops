@@ -9,15 +9,7 @@ export const authOptions = {
     strategy: 'jwt',
   },
   jwt: {
-    secret: process.env.SECRET,
-    encryption: true,
-  },
-  cookies: {
-    secure: true,
-    httpOnly: true,
-    sameSite: 'strict',
-    path: '/',
-    maxAge: 24 * 60 * 60 * 30, // 30 days
+    secret: process.env.JWT_SECRET,
   },
   adapter: PrismaAdapter(prisma),
   providers: [
