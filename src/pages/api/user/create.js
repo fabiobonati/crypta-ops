@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
-
-const prisma = new PrismaClient();
+import prisma from 'lib/prisma';
+import { hash } from 'bcrypt';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -9,21 +7,21 @@ export default async function handler(req, res) {
     return;
   }
   {
-    await handlePOST(res, req);
+    await handlePOST(req, res);
   }
 }
 //POST -> creazione nuovo utente
-async function handlePOST(res, req) {
+async function handlePOST(req, res) {
   try {
     const user = await prisma.user.create({
       data: {
         ...req.body,
-        password: await bcrypt.hash(req.body.password, 10),
+        password: await hash(req.body.password, 10),
       },
     });
     res.json(user).status(201);
   } catch (error) {
     console.error(error);
-    res.status(500);
+    res.status(500).json({ message: 'Something went wrong' });
   }
 }
