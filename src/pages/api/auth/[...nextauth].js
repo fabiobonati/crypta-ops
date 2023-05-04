@@ -4,11 +4,20 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { compare } from 'bcrypt';
 
-console.log(process.env.NEXTAUTH_SECRET);
 export const authOptions = {
   session: {
-    jwt: true,
+    strategy: 'jwt',
   },
+  jwt: {
+    secret: process.env.SECRET,
+    encryption: true,
+  },
+  cookies: {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+    path: '/',
+    maxAge: 24 * 60 * 60 * 30, // 30 days
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -41,10 +50,12 @@ export const authOptions = {
       },
     }),
   ],
+  secret: process.env.SECRET,
+  //baseUrl: process.env.NEXTAUTH_URL,
   pages: {
     signIn: 'auth/signin',
   },
-  secret: process.env.SECRET,
+
 };
 
 export default NextAuth(authOptions);
