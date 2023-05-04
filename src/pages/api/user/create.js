@@ -22,6 +22,6 @@ async function handlePOST(req, res) {
     res.json(user).status(201);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Something went wrong' });
+    res.status(500);
   }
 }

@@ -7,19 +7,19 @@ import { useRouter } from 'next/router';
 
 const SignIn = () => {
   const router = useRouter();
-  const [userInfo, setUserInfo] = useState({ email: '', password: '' });
   const { register, handleSubmit, reset } = useForm();
-  const { data: session, status } = useSession();
+  const { session } = useSession();
 
   const onSubmit = async (values) => {
-    /* try {
-      const body = { ...values };
-      let res = await signIn('credentials', {
-        ...body,
-        callbackUrl: router.query.callbackUrl,
-      });
-    } catch (error) {
-      console.error(error);
+    const result = await signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      callbackUrl: '/testsessione',
+    });
+
+    /* if (result.error) {
+      reset();
+      alert(result.error);
     } */
   };
 

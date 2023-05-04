@@ -1,10 +1,14 @@
 import NextAuth from 'next-auth/next';
+import prisma from 'lib/prisma';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { compare } from 'bcrypt';
 
 export const authOptions = {
   session: {
     strategy: 'jwt',
   },
+  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       type: 'credentials',
@@ -12,29 +16,27 @@ export const authOptions = {
         email: { label: 'Email', type: 'email', placeholder: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      authorize: async (credentials, req) => {
-        const user = await fetch(
-          `${process.env.NEXTAUTH_URL}/api/user/check-credentials`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              accept: 'application/json',
-            },
-            body: Object.entries(credentials)
-              .map((e) => e.join('='))
-              .join('&'),
-          }
-        )
-          .then((res) => res.json())
-          .catch((err) => {
-            return null;
-          });
-        if (user) {
-          return user;
-        } else {
-          return null;
-        }
+      async authorize(credentials) {
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            surname: true,
+            password: true,
+          },
+        });
+        if (!user) throw new Error('No user found');
+        const passwordCheck = await compare(
+          credentials.password,
+          user.password
+        );
+        if (!passwordCheck) throw new Error('Wrong password');
+        console.log(user);
+        return user;
       },
     }),
   ],
