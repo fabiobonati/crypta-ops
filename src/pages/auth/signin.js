@@ -17,10 +17,10 @@ const SignIn = () => {
       callbackUrl: '/testsessione',
     });
 
-    /* if (result.error) {
+    if (result.error) {
       reset();
       alert(result.error);
-    } */
+    }
   };
 
   return (

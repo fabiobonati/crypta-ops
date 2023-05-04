@@ -43,6 +43,8 @@ export const authOptions = {
       },
     }),
   ],
+  secret: process.env.SECRET,
+  baseUrl: process.env.NEXTAUTH_URL,
   pages: {
     signIn: 'auth/signin',
   },
