@@ -6,7 +6,7 @@ const LoggedOutNavbar = () => {
   const [navbar, setNavbar] = useState(false);
 
   return (
-    <nav className='w-full shadow md:shadow-none bg-white md:bg-transparent md:top-0 md:sticky md:z-50 md:bg-opacity-50 md:backdrop-blur-md relative z-50'>
+    <nav className='w-full shadow md:shadow-none bg-white md:top-0 md:sticky md:z-50 md:bg-opacity-90 md:backdrop-blur-md relative z-50'>
       <div className='justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8'>
         <div className='md:w-1/3'>
           <div className='flex items-center justify-between py-3 md:py-5'>
@@ -68,7 +68,7 @@ const LoggedOutNavbar = () => {
               </li>
               <li>
                 <Link
-                  href='javascript:void(0)'
+                  href='/'
                   className='py-2 px-4 hover:bg-slate-300 hover:rounded-full hover:bg-opacity-25'
                 >
                   Forum
@@ -76,7 +76,7 @@ const LoggedOutNavbar = () => {
               </li>
               <li>
                 <Link
-                  href='javascript:void(0)'
+                  href='/'
                   className='py-2 px-4 hover:bg-slate-300 hover:rounded-full hover:bg-opacity-25'
                 >
                   Support
