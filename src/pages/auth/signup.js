@@ -9,6 +9,7 @@ const SignUpForm = () => {
     handleSubmit,
     reset,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
 
@@ -36,9 +37,16 @@ const SignUpForm = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-      reset();
+      if (res.status === 201) {
+        reset();
+      } else if (res.status === 409) {
+        setError('emailRegistered', {
+          type: 'manual',
+          message: 'The email has already been registered!',
+        });
+      }
     } catch (error) {
-      console.log('Error creating user');
+      console.error(error);
     }
   }
 
@@ -79,7 +87,11 @@ const SignUpForm = () => {
                     id='grid-email'
                     type='email'
                     placeholder='Email'
-                    {...register('email', { required: true })}
+                    {...register('email', {
+                      required: true,
+                      pattern:
+                        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    })}
                   />
                 </div>
               </div>
@@ -91,13 +103,13 @@ const SignUpForm = () => {
                     name='password'
                     type='password'
                     placeholder='Password'
-                    {...register('password', { required: true })}
+                    {...register('password', { required: true, minLength: 8 })}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <div className='w-full px-3 text-center'>
                   <input
-                    className='w-full px-4 py-2 text-base text-gray-700 placeholder-gray-500 border rounded-lg focus:outline-none focus:shadow-outline'
+                    className='w-full px-4 py-2 text-base text-gray-700 placeholder-gray-500 border rounded-lg focus:outline-none focus:shadow-outline '
                     id='password_repeat'
                     name='password_repeat'
                     type='password'
@@ -106,9 +118,20 @@ const SignUpForm = () => {
                   />
                 </div>
               </div>
-              {!passwordCompatible ? (
-                <p className='text-red-500'>Error matching the password</p>
-              ) : null}
+              <div className='flex flex-wrap mb-6'>
+                <div className='w-full px-3 text-center text-red-500'>
+                  {!passwordCompatible ? (
+                    <p>Error matching the password</p>
+                  ) : null}
+                  {errors.emailRegistered && (
+                    <p>{errors.emailRegistered.message}</p>
+                  )}
+                  {errors.email && <p>The email is not valid</p>}
+                  {errors.password && (
+                    <p>The password must be at least 8 characters</p>
+                  )}
+                </div>
+              </div>
 
               <div className='flex flex-wrap mb-6'>
                 <div className='w-full px-3'>

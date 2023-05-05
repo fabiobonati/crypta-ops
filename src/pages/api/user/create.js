@@ -1,5 +1,6 @@
 import prisma from 'lib/prisma';
 import { hash } from 'bcrypt';
+import { Prisma } from '@prisma/client';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -19,9 +20,13 @@ async function handlePOST(req, res) {
         password: await hash(req.body.password, 10),
       },
     });
-    res.json(user).status(201);
-  } catch (error) {
-    console.error(error);
-    res.status(500);
+    res.status(201).send(user);
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2002') {
+        res.status(409).json({ message: 'User already exists' });
+      }
+    }
+    throw e;
   }
 }
