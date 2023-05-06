@@ -2,7 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useRef } from 'react';
-
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 const SignUpForm = () => {
   const {
     register,
@@ -16,7 +17,8 @@ const SignUpForm = () => {
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
   const [passwordCompatible, setPasswordCompatible] = useState(false);
-
+  const { data: session, status } = useSession();
+  const router = useRouter();
   useEffect(() => {
     if (password !== passwordRepeat) {
       setPasswordCompatible(false);
@@ -26,7 +28,6 @@ const SignUpForm = () => {
   }, [passwordRepeat]);
 
   async function onSubmit(values) {
-    console.log(passwordCompatible);
     if (!passwordCompatible) {
       return;
     }
@@ -39,6 +40,8 @@ const SignUpForm = () => {
       });
       if (res.status === 201) {
         reset();
+        session.user = body;
+        router.push('/dashboard');
       } else if (res.status === 409) {
         setError('emailRegistered', {
           type: 'manual',
