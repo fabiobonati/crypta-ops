@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 const SignUpForm = () => {
   const {
     register,
@@ -39,9 +39,14 @@ const SignUpForm = () => {
         body: JSON.stringify(body),
       });
       if (res.status === 201) {
+        console.log('User created!');
         reset();
-        session.user = body;
-        router.push('/dashboard');
+        const user = await res.json();
+        await signIn('credentials', {
+          email: user.email,
+          password: values.password,
+          callbackUrl: '/dashboard',
+        });
       } else if (res.status === 409) {
         setError('emailRegistered', {
           type: 'manual',
