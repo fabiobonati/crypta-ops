@@ -79,7 +79,6 @@ const MarketData = () => {
   const [selectedInterval, setSelectedInterval] = useState(1);
   useEffect(() => {
     if (router.isReady) {
-      console.log(id);
       setID(id);
     }
   }, [router.isReady, id]);

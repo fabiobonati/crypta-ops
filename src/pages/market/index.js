@@ -70,7 +70,6 @@ const Market = () => {
   const router = useRouter();
 
   if (isLoading) {
-    console.log('loading');
     return (
       <div className='flex flex-col justify-center w-2/3 h-full m-auto'>
         <Skeleton height={400} />

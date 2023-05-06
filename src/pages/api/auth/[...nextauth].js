@@ -40,7 +40,6 @@ export const authOptions = {
           user.password
         );
         if (!passwordCheck) throw new Error('Wrong password');
-        console.log(user);
         return user;
       },
     }),
