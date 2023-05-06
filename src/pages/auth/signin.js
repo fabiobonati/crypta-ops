@@ -14,7 +14,7 @@ const SignIn = () => {
     const result = await signIn('credentials', {
       email: values.email,
       password: values.password,
-      callbackUrl: '/testsessione',
+      callbackUrl: '/dashboard',
     });
 
     if (result.error) {
