@@ -1,10 +1,20 @@
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+
 const Home = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  useEffect(() => {
+    if (session) {
+      router.push('/dashboard');
+    }
+  }, [session]);
   return (
     <>
       <Head>
@@ -31,7 +41,7 @@ const Home = () => {
           href='/auth/signup'
           className='bg-pink-500 rounded-full px-4 py-2 text-white'
         >
-          <p className='text-lg md:text-2xl font-semibold '>Sign up</p>
+          <p className='text-lg md:text-2xl font-semibold '>Sign up now!</p>
         </Link>
       </main>
     </>
