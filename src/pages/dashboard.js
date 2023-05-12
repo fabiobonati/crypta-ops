@@ -7,21 +7,25 @@ const Dashboard = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    setIsLoading(true);
     if (!session) {
-      router.push('/');
+      setIsLoading(true);
     }
-    setIsLoading(false);
-  }, []);
+    if (session) {
+      setIsLoading(false);
+    }
+  }, [session]);
   return (
     <>
       {isLoading ? (
         <div className='flex flex-col items-center justify-center w-full h-full'>
           <h1>Loading...</h1>
         </div>
-      ) : null}
-      <h1>Dashboard</h1>
-      <p>Hi, {session?.user?.email ?? 'friend'}!</p>
+      ) : (
+        <>
+          <h1>Dashboard</h1>
+          <p>Hi, {session?.user?.email ?? 'friend'}!</p>
+        </>
+      )}
     </>
   );
 };
