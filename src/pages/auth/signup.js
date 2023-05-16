@@ -42,11 +42,14 @@ const SignUpForm = () => {
         console.log('User created!');
         reset();
         const user = await res.json();
-        await signIn('credentials', {
+        const result = await signIn('credentials', {
           email: user.email,
           password: values.password,
           callbackUrl: '/dashboard',
         });
+        if (result) {
+          router.push('/dashboard');
+        }
       } else if (res.status === 409) {
         setError('emailRegistered', {
           type: 'manual',

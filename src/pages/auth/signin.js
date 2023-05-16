@@ -16,10 +16,12 @@ const SignIn = () => {
       password: values.password,
       callbackUrl: '/dashboard',
     });
-
-    if (result.error) {
+    if (result && !result?.error) {
+      router.push('/dashboard');
+    }
+    if (result?.error) {
       reset();
-      alert(result.error);
+      alert(result?.error);
     }
   };
 
