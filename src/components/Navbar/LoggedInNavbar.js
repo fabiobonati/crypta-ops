@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
 const LoggedInNavbar = () => {
   const [navbar, setNavbar] = useState(false);
   const { data: session } = useSession();
+  const router = useRouter();
 
   return (
     <nav className='w-full shadow md:shadow-none bg-white md:bg-transparent md:top-0 md:sticky md:z-50 md:bg-opacity-50 md:backdrop-blur-md relative z-50'>
@@ -69,7 +71,7 @@ const LoggedInNavbar = () => {
               </li>
               <li>
                 <Link
-                  href='javascript:void(0)'
+                  href='#'
                   className='py-2 px-4 hover:bg-slate-300 hover:rounded-full hover:bg-opacity-25'
                 >
                   Forum
@@ -77,7 +79,7 @@ const LoggedInNavbar = () => {
               </li>
               <li>
                 <Link
-                  href='javascript:void(0)'
+                  href='#'
                   className='py-2 px-4 hover:bg-slate-300 hover:rounded-full hover:bg-opacity-25'
                 >
                   Support
@@ -104,7 +106,10 @@ const LoggedInNavbar = () => {
               <li>
                 <button
                   className='group  text-black transition-all duration-200 ease-in-out text-center bg-gray-100 hover:bg-gray-200 rounded-full py-2 px-4'
-                  onClick={() => signOut()}
+                  onClick={() => {
+                    signOut();
+                    router.push('/');
+                  }}
                 >
                   Logout
                 </button>
