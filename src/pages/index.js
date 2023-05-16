@@ -11,7 +11,7 @@ const Home = () => {
   const { data: session } = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (session) {
+    if (session != null || session != undefined) {
       router.push('/dashboard');
     }
   }, [session]);

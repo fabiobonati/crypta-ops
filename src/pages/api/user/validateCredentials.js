@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 }
 async function handlePOST(req, res) {
-  const query = await prisma.user.findUnique({
+  const query = await prisma.User.findUnique({
     where: {
       email: req.body.email,
     },
