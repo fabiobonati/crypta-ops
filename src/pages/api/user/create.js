@@ -14,13 +14,25 @@ export default async function handler(req, res) {
 //POST -> creazione nuovo utente
 async function handlePOST(req, res) {
   try {
-    const user = await prisma.user.create({
+    const user = await prisma.User.create({
       data: {
         ...req.body,
         password: await hash(req.body.password, 10),
       },
     });
-    res.status(201).send(user);
+    const wallet = await prisma.Wallet.create({
+      data: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        startingAmount: 500,
+        user: {
+          connect: {
+            id: user.id,
+          },
+        },
+      },
+    });
+    res.status(201).send(user, wallet);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
