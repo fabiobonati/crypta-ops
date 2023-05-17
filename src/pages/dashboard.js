@@ -46,7 +46,7 @@ const Dashboard = () => {
           <div className='flex flex-row gap-4 justify-between'>
             <p className='text-2xl font-medium flex items-center'>
               <span className='font-semibold'>Wallet:&nbsp;</span>
-              {wallet.startingAmount}€
+              {wallet ? wallet.startingAmount : null}€
             </p>
             <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
               Buy crypto

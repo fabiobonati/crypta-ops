@@ -20,19 +20,7 @@ async function handlePOST(req, res) {
         password: await hash(req.body.password, 10),
       },
     });
-    const wallet = await prisma.Wallet.create({
-      data: {
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        startingAmount: 500,
-        user: {
-          connect: {
-            id: user.id,
-          },
-        },
-      },
-    });
-    res.status(201).send(user, wallet);
+    res.status(201).send(user);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
