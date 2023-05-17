@@ -28,7 +28,12 @@ async function handleGET(req, res, session) {
       currency: true,
     },
   });
-  res.json({ transaction: query });
+  let balance = 0;
+  query.map((transaction) => {
+    if (transaction.type === 'sale') balance += transaction.amount;
+    if (transaction.type === 'purchase') balance -= transaction.amount;
+  });
+  res.json({ transaction: query, balance: balance });
 }
 
 export default async function handler(req, res) {
