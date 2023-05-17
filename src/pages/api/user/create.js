@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 //POST -> creazione nuovo utente
 async function handlePOST(req, res) {
   try {
-    const user = await prisma.User.create({
+    const user = await prisma.user.create({
       data: {
         ...req.body,
         password: await hash(req.body.password, 10),

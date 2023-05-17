@@ -1,5 +1,4 @@
-import { Slabo_13px } from 'next/font/google';
-import prisma from '../../../lib/prisma';
+import prisma from 'lib/prisma';
 import { getSession } from 'next-auth/react';
 
 async function handleGET(req, res, session) {
