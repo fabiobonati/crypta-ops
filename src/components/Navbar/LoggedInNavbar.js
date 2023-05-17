@@ -97,7 +97,7 @@ const LoggedInNavbar = () => {
             <ul className='mx-auto items-center justify-center  md:justify-end flex flex-row gap-4 md:space-x-6 md:space-y-0'>
               <li>
                 <Link
-                  href='/profile'
+                  href='/dashboard'
                   className='group  text-black transition-all duration-200 ease-in-out text-center bg-gray-100 hover:bg-gray-200 rounded-full py-2 px-4'
                 >
                   <span>{session.user.name}</span>
