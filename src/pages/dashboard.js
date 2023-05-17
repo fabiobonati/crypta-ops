@@ -31,6 +31,18 @@ const Dashboard = () => {
           setWallet(data.user.Wallet);
           setIsLoading(false);
         });
+      fetch('/api/transactions/', {
+        method: 'GET',
+      })
+        .then((res) => {
+          if (res.status === 401) {
+            router.push('/');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setAmount(data.balance);
+        });
     }
   }, [session, router]);
 
@@ -45,7 +57,7 @@ const Dashboard = () => {
       });
       if (res.status === 201) {
         console.log('Wallet created!');
-        const transaction = await res.json();
+        const wallet = await res.json();
         router.reload();
       }
     } catch (error) {
@@ -104,7 +116,7 @@ const Dashboard = () => {
               <div className='flex flex-row gap-4 justify-between'>
                 <p className='text-2xl font-medium flex items-center'>
                   <span className='font-semibold'>Wallet:&nbsp;</span>
-                  {wallet ? wallet.startingAmount : null}€
+                  {amount ? wallet.startingAmount / 1 + amount : null}€
                 </p>
                 <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
                   Buy crypto
