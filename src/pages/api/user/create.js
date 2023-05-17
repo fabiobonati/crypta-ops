@@ -22,11 +22,12 @@ async function handlePOST(req, res) {
     });
     res.status(201).send(user);
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+    /* if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         res.status(409).json({ message: 'User already exists' });
       }
-    }
+    } */
+    res.status(409).json({ message: 'User already exists' });
     throw e;
   }
 }
