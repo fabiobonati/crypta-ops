@@ -33,7 +33,7 @@ const SignUpForm = () => {
     }
     try {
       const body = { ...values };
-      const res = await fetch(`/api/user/create`, {
+      const res = await fetch(`/api/user`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
