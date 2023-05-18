@@ -33,7 +33,7 @@ async function handleGET(req, res, session) {
     if (transaction.type === 'sale') balance += transaction.amount;
     if (transaction.type === 'purchase') balance -= transaction.amount;
   });
-  res.json({ transaction: query, balance: balance });
+  res.json({ transactions: query, balance: balance });
 }
 
 export default async function handler(req, res) {
