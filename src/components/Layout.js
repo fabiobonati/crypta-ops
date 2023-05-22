@@ -6,9 +6,11 @@ export default function Layout({ children }) {
   const { data: session } = useSession();
   return (
     <>
-      {session ? <LoggedInNavbar /> : <LoggedOutNavbar />}
-      <main>{children}</main>
-      <Footer />
+      <div className='flex flex-col h-screen'>
+        {session ? <LoggedInNavbar /> : <LoggedOutNavbar />}
+        <main className='flex-grow'>{children}</main>
+        <Footer />
+      </div>
     </>
   );
 }
