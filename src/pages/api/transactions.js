@@ -1,7 +1,8 @@
 import prisma from '../../../lib/prisma';
 import { getSession } from 'next-auth/react';
 
-async function handleGET(req, res, session) {
+async function handleGET(req, res, session, query) {
+  //get wallet id from logged user
   const wallet = await prisma.User.findUnique({
     where: {
       email: session.user.email,
@@ -10,12 +11,42 @@ async function handleGET(req, res, session) {
       Wallet: {
         select: {
           id: true,
+          startingAmount: true,
         },
       },
     },
   });
-  if (!wallet) return res.status(404).json({ message: 'Wallet not found' });
-  const query = await prisma.Transaction.findMany({
+  // if wallet not found, return 404
+  if (!wallet.Wallet)
+    return res.status(404).json({ message: 'Wallet not found' });
+
+  // if call has currency query, return transactions for that currency
+  if (query.currency) {
+    const transaction = await prisma.Transaction.findMany({
+      where: {
+        walletId: wallet?.Wallet.id,
+        currency: query.currency,
+      },
+      select: {
+        id: true,
+        amount: true,
+        createdAt: true,
+        updatedAt: true,
+        type: true,
+        currency: true,
+      },
+    });
+    return res.json({ transaction: transaction });
+  }
+
+  const currencies = await prisma.transaction.groupBy({
+    by: ['currency'],
+    where: {
+      walletId: wallet?.Wallet.id,
+    },
+  });
+
+  const transactions = await prisma.Transaction.findMany({
     where: {
       walletId: wallet?.Wallet.id,
     },
@@ -28,22 +59,34 @@ async function handleGET(req, res, session) {
       currency: true,
     },
   });
-  let balance = 0;
-  query.map((transaction) => {
-    if (transaction.type === 'sale') balance += transaction.amount;
-    if (transaction.type === 'purchase') balance -= transaction.amount;
+  const transactionsPerCurrency = {};
+
+  // Iterate over each transaction
+  transactions.forEach((transaction) => {
+    const { currency } = transaction;
+
+    // Check if the crypto_symbol already exists in the scheme object
+    if (transactionsPerCurrency.hasOwnProperty(currency)) {
+      // If it exists, push the current transaction to the existing array
+      transactionsPerCurrency[currency].push(transaction);
+    } else {
+      // If it doesn't exist, create a new array with the current transaction
+      transactionsPerCurrency[currency] = [transaction];
+    }
   });
-  res.json({ transactions: query, balance: balance });
+  //response with an object containing a list of transactions for each currency 
+  res.json(transactionsPerCurrency);
 }
 
 export default async function handler(req, res) {
   const session = await getSession({ req });
+  const { query } = req;
   if (!session) {
     console.log(session);
     return res.status(401).json({ message: 'Unauthorized' });
   }
   if (req.method == 'GET') {
-    await handleGET(req, res, session);
+    await handleGET(req, res, session, query);
   }
   if (req.method == 'POST') {
     await handlePOST(req, res, session);
