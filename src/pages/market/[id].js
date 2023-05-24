@@ -157,15 +157,6 @@ const MarketData = () => {
         display: false,
       },
     },
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-    },
   };
   if (isLoading) {
     return (
@@ -204,8 +195,8 @@ const MarketData = () => {
                   : `/cryptoLogo/generic.svg`
               }
               width={75}
-              height={57}
-              alt={cryptoData.id}
+              height={75}
+              alt={cryptoData}
               className='mr-6 lg:mr-2'
             />
           </div>
