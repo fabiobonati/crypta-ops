@@ -1,7 +1,7 @@
 import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import { useForm } from 'react-hook-form';
+import { get, set, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { data } from 'autoprefixer';
 
@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [wallet, setWallet] = useState(null);
   const [userData, setUserData] = useState({});
+  const [assetsBalance, setAssetsBalance] = useState(0);
   const [amount, setAmount] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [cryptoData, setCryptoData] = useState([]);
@@ -78,42 +79,49 @@ const Dashboard = () => {
         .then((data) => {
           setUserData(data.user);
           setWallet(data.user.Wallet);
-          fetch('/api/transactions/', {
-            method: 'GET',
-          })
-            .then((res) => {
-              if (res.status === 401) {
-                router.push('/');
-              }
-              return res.json();
-            })
-            .then((data) => {
-              if (Object.keys(data).length === 0) {
-                setAmount(0);
-                setIsLoading(false);
-                return;
-              }
-              setTransactions(data);
-              Object.keys(data).forEach((currency) => {
-                fetch(`https://api.coincap.io/v2/assets/${currency}`)
-                  .then((res) => res.json())
-                  .then((dataRes) => {
-                    Object.values(data).forEach((element) => {
-                      element.forEach((transaction) => {
-                        if (transaction.currency === currency) {
-                          setAmount(transaction.amount * dataRes.data.priceUsd);
-                        }
-                      });
-                    });
-                    setUserCurrencies(Object.keys(data));
-                    fetchMarketData();
-                    setIsLoading(false);
-                  });
-              });
-            });
+        });
+
+      fetch('/api/transactions/', {
+        method: 'GET',
+      })
+        .then((res) => {
+          if (res.status === 401) {
+            router.push('/');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data.length === 0) {
+            setAmount(0);
+            setIsLoading(false);
+            return;
+          }
+          let currencies = [];
+          data.forEach((transaction) => {
+            if (!currencies.includes(transaction.currency)) {
+              currencies.push(transaction.currency);
+            }
+          });
+          setUserCurrencies(currencies);
+          setTransactions(data);
+          getAssetsBalance(data);
+          fetchMarketData();
+          setIsLoading(false);
         });
     }
+    return () => {
+      setUserData({});
+      setWallet(null);
+      setAmount(0);
+      setTransactions([]);
+      setCryptoData([]);
+      setUserCurrencies([]);
+    };
   }, []);
+
+  useEffect(() => {
+    getAssetsBalance(transactions);
+  }, [transactions]);
 
   const onSubmit = async () => {
     try {
@@ -133,6 +141,29 @@ const Dashboard = () => {
     }
   };
 
+  const getAssetsBalance = async (transactionsParam) => {
+    let assetsBalance = 0;
+    try {
+      const response = await fetch(`https://api.coincap.io/v2/assets`);
+      if (response.ok) {
+        const data = await response.json();
+
+        for (let i = 0; i < data.data.length; i++) {
+          transactionsParam.forEach((transaction) => {
+            if (transaction.currency === data.data[i].id) {
+              // Calculate the assets balance based on the transactions and API data
+              assetsBalance += transaction.amount * data.data[i].priceUsd;
+            }
+          });
+        }
+        setAssetsBalance(assetsBalance.toFixed(3));
+      } else {
+        throw new Error('API call failed');
+      }
+    } catch (error) {
+      console.log('Error fetching market data:', error);
+    }
+  };
   //call to COINCAP APIs to get data about crypto
   const fetchMarketData = async () => {
     try {
@@ -147,8 +178,10 @@ const Dashboard = () => {
   //function that calculates the total amount owned for a currency
   const calculateTotalAmount = (currency) => {
     let totalAmount = 0;
-    transactions[currency].forEach((transaction) => {
-      totalAmount += transaction.amount;
+    transactions.forEach((transaction) => {
+      if (transaction.currency === currency) {
+        totalAmount += transaction.amount;
+      }
     });
     return totalAmount;
   };
@@ -209,12 +242,12 @@ const Dashboard = () => {
               <div className='flex flex-row gap-4 justify-between'>
                 <p className='text-2xl font-medium flex items-center'>
                   <span className='font-semibold'>Your assets:&nbsp;</span>
-                  {'$' + amount}
+                  {'$' + assetsBalance}
                 </p>
               </div>
             </div>
           )}
-          {amount != 0 ? (
+          {transactions.length > 0 ? (
             <div className='border-2 rounded-lg border-gray-100'>
               <table className='text-center mx-auto w-full table-fixed'>
                 <thead className='hidden border-b-2 border-gray-200 sm:table-header-group'>
@@ -253,7 +286,11 @@ const Dashboard = () => {
                               alt={currency}
                               className='mr-6 lg:mr-2'
                             />
-                            <p className='text-lg font-semibold'>{currency}</p>
+                            <p className='text-lg font-semibold'>
+                              {`${currency
+                                .charAt(0)
+                                .toUpperCase()}${currency.slice(1)}`}
+                            </p>
                           </div>
                         </td>
                         <td className='p-4'>
