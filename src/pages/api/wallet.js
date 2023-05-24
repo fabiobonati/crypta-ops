@@ -57,13 +57,14 @@ async function handlePOST(req, res) {
 }
 export default async function handler(req, res) {
   const session = await getSession({ req });
+  if (req.method === 'POST') await handlePOST(req, res);
+
   if (!session) {
+    console.log(session);
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  if (req.method === 'POST') await handlePOST(req, res);
-  if (req.method === 'GET') await handleGET(req, res, session);
 
-  if (req.method !== 'POST' || req.method !== 'GET') {
+  if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 }
