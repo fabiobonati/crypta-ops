@@ -80,44 +80,48 @@ const Dashboard = () => {
           setUserData(data.user);
           setWallet(data.user.Wallet);
         });
-
-      fetch('/api/transactions/', {
-        method: 'GET',
-      })
-        .then((res) => {
-          if (res.status === 401) {
-            router.push('/');
-          }
-          return res.json();
-        })
-        .then((data) => {
-          if (data.length === 0) {
-            setAmount(0);
-            setIsLoading(false);
-            return;
-          }
-          let currencies = [];
-          data.forEach((transaction) => {
-            if (!currencies.includes(transaction.currency)) {
-              currencies.push(transaction.currency);
-            }
-          });
-          setUserCurrencies(currencies);
-          setTransactions(data);
-          getAssetsBalance(data);
-          fetchMarketData();
-          setIsLoading(false);
-        });
     }
     return () => {
       setUserData({});
       setWallet(null);
-      setAmount(0);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch('/api/transactions/', {
+      method: 'GET',
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          router.push('/');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data.length === 0 || wallet === null) {
+          setAmount(0);
+          setIsLoading(false);
+          return;
+        }
+        let currencies = [];
+        data.forEach((transaction) => {
+          if (!currencies.includes(transaction.currency)) {
+            currencies.push(transaction.currency);
+          }
+        });
+        setUserCurrencies(currencies);
+        setTransactions(data);
+        console.log(data);
+        fetchMarketData();
+        setIsLoading(false);
+      });
+    return () => {
       setTransactions([]);
       setCryptoData([]);
       setUserCurrencies([]);
     };
-  }, []);
+  }, [userData, wallet]);
 
   useEffect(() => {
     getAssetsBalance(transactions);
