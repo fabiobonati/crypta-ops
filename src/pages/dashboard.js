@@ -11,7 +11,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [wallet, setWallet] = useState(null);
   const [userData, setUserData] = useState({});
-  const [amount, setAmount] = useState();
+  const [amount, setAmount] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [cryptoData, setCryptoData] = useState([]);
   const [userCurrencies, setUserCurrencies] = useState([]);
@@ -88,11 +88,28 @@ const Dashboard = () => {
               return res.json();
             })
             .then((data) => {
+              if (Object.keys(data).length === 0) {
+                setAmount(0);
+                setIsLoading(false);
+                return;
+              }
               setTransactions(data);
-              setUserCurrencies(Object.keys(data));
-              fetch('/api/wallet').th;
-              fetchMarketData();
-              setIsLoading(false);
+              Object.keys(data).forEach((currency) => {
+                fetch(`https://api.coincap.io/v2/assets/${currency}`)
+                  .then((res) => res.json())
+                  .then((dataRes) => {
+                    Object.values(data).forEach((element) => {
+                      element.forEach((transaction) => {
+                        if (transaction.currency === currency) {
+                          setAmount(transaction.amount * dataRes.data.priceUsd);
+                        }
+                      });
+                    });
+                    setUserCurrencies(Object.keys(data));
+                    fetchMarketData();
+                    setIsLoading(false);
+                  });
+              });
             });
         });
     }
@@ -129,14 +146,9 @@ const Dashboard = () => {
 
   //function that calculates the total amount owned for a currency
   const calculateTotalAmount = (currency) => {
-    const transactionsPerCurrency = transactions[currency];
     let totalAmount = 0;
-    transactionsPerCurrency.forEach((transaction) => {
-      if (transaction.type === 'purchase') {
-        totalAmount += transaction.amount;
-      } else if (transaction.type === 'sale') {
-        totalAmount -= transaction.amount;
-      }
+    transactions[currency].forEach((transaction) => {
+      totalAmount += transaction.amount;
     });
     return totalAmount;
   };
@@ -197,25 +209,79 @@ const Dashboard = () => {
               <div className='flex flex-row gap-4 justify-between'>
                 <p className='text-2xl font-medium flex items-center'>
                   <span className='font-semibold'>Your assets:&nbsp;</span>
-                  {amount}€
+                  {'$' + amount}
                 </p>
               </div>
             </div>
           )}
-          <div className='border-2 rounded-lg border-gray-100'>
-            <table className='text-center mx-auto w-full'>
-              <thead className='hidden border-b-2 border-gray-200 sm:table-header-group'>
-                <tr className='text-center w-full min-w-full'>
-                  <th className='p-4'>Name</th>
-                  <th className='p-4'>Balance</th>
-                  <th className='p-4'>Market Price</th>
-                </tr>
-              </thead>
+          {amount != 0 ? (
+            <div className='border-2 rounded-lg border-gray-100'>
+              <table className='text-center mx-auto w-full table-fixed'>
+                <thead className='hidden border-b-2 border-gray-200 sm:table-header-group'>
+                  <tr className='text-center w-full min-w-full'>
+                    <th className='p-4'>Name</th>
+                    <th className='p-4'>Balance</th>
+                    <th className='p-4'>Market Price</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  
-              </tbody>
-            </table>
-          </div>
+                  {userCurrencies.map((currency) => {
+                    return (
+                      <tr
+                        key={currency}
+                        className='border-b-2 border-gray-200 sm:table-row hover:bg-gray-100'
+                        onClick={() => {
+                          router.push(`/market/${currency}`);
+                        }}
+                      >
+                        <td className='p-4'>
+                          <div className='flex flex-row items-center justify-center'>
+                            <Image
+                              src={
+                                cryptoData.find(
+                                  (element) => element.id === currency
+                                )
+                                  ? `/cryptoLogo/${cryptoData
+                                      .find(
+                                        (element) => element.id === currency
+                                      )
+                                      .symbol.toLowerCase()}.svg`
+                                  : `/cryptoLogo/generic.svg`
+                              }
+                              width={30}
+                              height={30}
+                              alt={currency}
+                              className='mr-6 lg:mr-2'
+                            />
+                            <p className='text-lg font-semibold'>{currency}</p>
+                          </div>
+                        </td>
+                        <td className='p-4'>
+                          <p className='text-lg font-semibold'>
+                            {calculateTotalAmount(currency)}
+                          </p>
+                        </td>
+                        <td className='p-4 max-w-1/3'>
+                          <p className='text-lg font-semibold'>
+                            {cryptoData.map((crypto) => {
+                              if (crypto.id === currency) {
+                                return '$' + (crypto.priceUsd / 1).toFixed(6);
+                              }
+                            })}
+                          </p>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p>
+              You don&apos;t have done any transaction... Go to the market to
+              buy some assets!
+            </p>
+          )}
         </div>
       )}
     </>
