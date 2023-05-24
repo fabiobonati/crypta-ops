@@ -55,7 +55,6 @@ async function handleGET(req, res, session, query) {
       amount: true,
       createdAt: true,
       updatedAt: true,
-      type: true,
       currency: true,
     },
   });
@@ -64,7 +63,7 @@ async function handleGET(req, res, session, query) {
   // Iterate over each transaction
   transactions.forEach((transaction) => {
     const { currency } = transaction;
-
+    
     // Check if the crypto_symbol already exists in the scheme object
     if (transactionsPerCurrency.hasOwnProperty(currency)) {
       // If it exists, push the current transaction to the existing array
