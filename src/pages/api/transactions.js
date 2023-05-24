@@ -58,23 +58,8 @@ async function handleGET(req, res, session, query) {
       currency: true,
     },
   });
-  const transactionsPerCurrency = {};
-
-  // Iterate over each transaction
-  transactions.forEach((transaction) => {
-    const { currency } = transaction;
-    
-    // Check if the crypto_symbol already exists in the scheme object
-    if (transactionsPerCurrency.hasOwnProperty(currency)) {
-      // If it exists, push the current transaction to the existing array
-      transactionsPerCurrency[currency].push(transaction);
-    } else {
-      // If it doesn't exist, create a new array with the current transaction
-      transactionsPerCurrency[currency] = [transaction];
-    }
-  });
-  //response with an object containing a list of transactions for each currency 
-  res.json(transactionsPerCurrency);
+  //response with an object containing a list of transactions for each currency
+  res.json(transactions);
 }
 
 export default async function handler(req, res) {
