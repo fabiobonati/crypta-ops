@@ -22,7 +22,7 @@ async function handleGET(req, res, session) {
       },
     },
   });
-  res.json({ user: query });
+  return res.json({ user: query });
 }
 //POST->create new user
 async function handlePOST(req, res) {
@@ -39,7 +39,6 @@ async function handlePOST(req, res) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
         res.status(409).json({ message: 'User already exists' });
-        console.log(409);
       }
     }
     //throw e;
