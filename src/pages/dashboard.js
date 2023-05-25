@@ -112,7 +112,6 @@ const Dashboard = () => {
         });
         setUserCurrencies(currencies);
         setTransactions(data);
-        console.log(data);
         fetchMarketData();
         setIsLoading(false);
       });
