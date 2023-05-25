@@ -1,11 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from 'lib/prisma';
 import { getSession } from 'next-auth/react';
 import { Prisma } from '@prisma/client';
 import { hash } from 'bcrypt';
 
 //GET->get user data
 async function handleGET(req, res, session) {
-  const prisma = new PrismaClient();
   const query = await prisma.User.findUnique({
     where: {
       email: session.user.email,
@@ -23,11 +22,10 @@ async function handleGET(req, res, session) {
       },
     },
   });
-  return res.json({ user: query });
+  res.json({ user: query });
 }
 //POST->create new user
 async function handlePOST(req, res) {
-  const prisma = new PrismaClient();
   try {
     const user = await prisma.user.create({
       data: {
