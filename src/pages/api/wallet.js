@@ -53,7 +53,7 @@ async function handlePOST(req, res) {
       },
     },
   });
-  res.status(201).send(wallet);
+  res.status(201).send({ success: true });
 }
 export default async function handler(req, res) {
   const session = await getSession({ req });

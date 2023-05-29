@@ -33,7 +33,7 @@ async function handlePOST(req, res) {
         password: await hash(req.body.password, 10),
       },
     });
-    res.status(201).send(user);
+    res.status(201).send({ success: true });
     console.log(201);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
