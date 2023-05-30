@@ -36,7 +36,6 @@ model Transaction {
   updatedAt DateTime @updatedAt
   walletId  Int
   amount    Float
-  status    String
   currency  String
   Wallet    Wallet   @relation(fields: [walletId], references: [id])
 }
