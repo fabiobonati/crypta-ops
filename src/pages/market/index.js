@@ -145,15 +145,15 @@ const Market = () => {
             </tbody>
           </table>
         </div>
-        <div className='flex justify-center mt-4'>
+        <div className='flex flex-wrap justify-center mt-4'>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map(
             (pageNumber) => (
               <button
                 key={pageNumber}
-                className={`mx-2 px-4 py-2 rounded-full ${
+                className={`mx-2 my-1 px-4 py-2 rounded-full ${
                   currentPage === pageNumber
                     ? 'bg-pink-400 text-white'
-                    : 'hover:bg-gray-200'
+                    : 'bg-gray-200 hover:bg-gray-300'
                 }`}
                 onClick={() => setCurrentPage(pageNumber)}
               >
