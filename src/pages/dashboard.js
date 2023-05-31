@@ -138,6 +138,8 @@ const Dashboard = () => {
         console.log('Wallet created!');
         const wallet = await res.json();
         router.reload();
+      } else {
+        router.reload();
       }
     } catch (error) {
       console.error(error);
