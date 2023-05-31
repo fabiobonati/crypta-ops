@@ -117,7 +117,7 @@ export default async function handler(req, res) {
   if (req.method == 'POST') {
     await handlePOST(req, res, session);
   }
-  if (req.method !== 'GET' && req.method !== 'POST')
+  if (req.method != 'GET' && req.method != 'POST')
     res.status(405).json({ message: 'Method Not Allowed' });
   if (!session) {
     console.log(session);
