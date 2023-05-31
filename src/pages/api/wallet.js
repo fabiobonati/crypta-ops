@@ -21,7 +21,7 @@ async function handlePOST(req, res) {
 export default async function handler(req, res) {
   const session = await getSession({ req });
 
-  if (req.method == 'POST') await handlePOST(req, res);
+  if (req.method === 'POST') return await handlePOST(req, res);
 
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
