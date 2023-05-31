@@ -62,13 +62,55 @@ async function handleGET(req, res, session, query) {
   res.json(transactions);
 }
 
+//POST-> create a new transaction
+async function handlePOST(req, res, session) {
+  const { amount, currency, email } = req.body;
+  const wallet = await prisma.User.findUnique({
+    where: {
+      email: email,
+    },
+    select: {
+      Wallet: {
+        select: {
+          id: true,
+          startingAmount: true,
+          balance: true,
+        },
+      },
+    },
+  });
+  if (!wallet.Wallet)
+    return res.status(404).json({ message: 'Wallet not found' });
+  if (wallet.Wallet.balance < amount / 1) {
+    return res.status(403).json({ success: false });
+  }
+  const response = await fetch(`https://api.coincap.io/v2/assets/${currency}`);
+  const data = await response.json();
+  const cryptoPrice = data.data.priceUsd;
+  const cryptoQuantity = amount / cryptoPrice;
+  //create new transaction
+  const newTransaction = await prisma.Transaction.create({
+    data: {
+      amount: cryptoQuantity,
+      currency: currency,
+      walletId: wallet.Wallet.id,
+    },
+  });
+  //update wallet balance
+  const updatedWallet = await prisma.Wallet.update({
+    where: {
+      id: wallet.Wallet.id,
+    },
+    data: {
+      balance: wallet.Wallet.balance - amount / 1,
+    },
+  });
+  res.status(201).json({ success: true });
+}
+
 export default async function handler(req, res) {
   const session = await getSession({ req });
   const { query } = req;
-  if (!session) {
-    console.log(session);
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
   if (req.method == 'GET') {
     await handleGET(req, res, session, query);
   }
@@ -77,4 +119,8 @@ export default async function handler(req, res) {
   }
   if (req.method !== 'GET' && req.method !== 'POST')
     res.status(405).json({ message: 'Method Not Allowed' });
+  if (!session) {
+    console.log(session);
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 }
