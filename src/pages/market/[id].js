@@ -15,6 +15,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useForm } from 'react-hook-form';
 ChartS.register(
   CategoryScale,
   LinearScale,
@@ -25,6 +26,7 @@ ChartS.register(
   Tooltip,
   Legend
 );
+import { useSession } from 'next-auth/react';
 const symbolsArray = [
   'steth',
   'busd',
@@ -70,6 +72,7 @@ const symbolsArray = [
 ];
 
 const MarketData = () => {
+  const session = useSession();
   const router = useRouter();
   const { id } = router.query;
   const [ID, setID] = useState('');
@@ -77,6 +80,8 @@ const MarketData = () => {
   const [selectedCrypto, setSelectedCrypto] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [selectedInterval, setSelectedInterval] = useState(1);
+  const [amount, setAmount] = useState(0);
+  const { handleSubmit } = useForm();
   useEffect(() => {
     if (router.isReady) {
       setID(id);
@@ -158,6 +163,26 @@ const MarketData = () => {
       },
     },
   };
+  //make the post req to the transaction api
+  const onSubmit = async () => {
+    const body = {
+      amount,
+      currency: crypto.name.toLowerCase(),
+      email: session.data.user.email,
+    };
+    console.log(session);
+    const response = await fetch('/api/transactions', {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status === 201) {
+      console.log('success');
+    }
+  };
+
   if (isLoading) {
     return (
       <div className='p-6 lg:p-10'>
@@ -284,6 +309,36 @@ const MarketData = () => {
           1d
         </button>
       </div>
+      {session ? (
+        <div>
+          <form className='w-full mx-auto' onSubmit={handleSubmit(onSubmit)}>
+            <div className='flex flex-wrap -mx-3 mb-6'>
+              <div className='w-full px-3 mb-6 md:mb-2'></div>
+            </div>
+            <div className='flex flex-wrap -mx-3 mb-6'>
+              <div className='w-full px-3'>
+                <input
+                  className='w-full px-4 py-2 text-base text-gray-700 placeholder-gray-500 border rounded-lg focus:outline-none focus:shadow-outline'
+                  id='grid-amount'
+                  type='number'
+                  placeholder='50$'
+                  required={true}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3 mb-6'>
+              <div className='w-full px-3'>
+                <input
+                  className='w-full px-4 py-2 text-base font-semibold text-white transition duration-200 ease-in bg-pink-500 rounded-lg hover:bg-pink-400 focus:outline-none focus:shadow-outline'
+                  type='submit'
+                  value='Buy'
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+      ) : null}
     </div>
   );
 };
