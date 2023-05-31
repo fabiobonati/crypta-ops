@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { get, set, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { data } from 'autoprefixer';
+import Link from 'next/link';
 
 const Dashboard = () => {
   const session = useSession();
@@ -137,8 +138,6 @@ const Dashboard = () => {
       if (res.status === 201) {
         console.log('Wallet created!');
         const wallet = await res.json();
-        router.reload();
-      } else {
         router.reload();
       }
     } catch (error) {
@@ -319,9 +318,12 @@ const Dashboard = () => {
               </table>
             </div>
           ) : (
-            <p>
-              You don&apos;t have done any transaction... Go to the market to
-              buy some assets!
+            <p className='text-red-500'>
+              You haven&apos;t done any transaction... Go to the&nbsp;
+              <Link href={'/market'} className='underline underline-offset-2'>
+                market
+              </Link>{' '}
+              to buy some assets!
             </p>
           )}
         </div>
