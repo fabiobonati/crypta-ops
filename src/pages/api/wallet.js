@@ -7,8 +7,8 @@ async function handlePOST(req, res) {
     data: {
       createdAt: new Date(),
       updatedAt: new Date(),
-      startingAmount: req.body.startingAmount,
-      balance: req.body.startingAmount,
+      startingAmount: req.body.startingAmount / 1,
+      balance: req.body.startingAmount / 1,
       user: {
         connect: {
           id: req.body.userId,
@@ -20,12 +20,12 @@ async function handlePOST(req, res) {
 }
 export default async function handler(req, res) {
   const session = await getSession({ req });
-  if (req.method === 'POST') await handlePOST(req, res);
 
   if (!session) {
     console.log(session);
     return res.status(401).json({ message: 'Unauthorized' });
   }
+  if (req.method === 'POST') await handlePOST(req, res);
 
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
