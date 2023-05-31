@@ -8,6 +8,7 @@ async function handlePOST(req, res) {
       createdAt: new Date(),
       updatedAt: new Date(),
       startingAmount: req.body.startingAmount,
+      balance: req.body.startingAmount,
       user: {
         connect: {
           id: req.body.userId,
