@@ -81,6 +81,8 @@ const MarketData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedInterval, setSelectedInterval] = useState(1);
   const [amount, setAmount] = useState(0);
+  const [amountToSell, setAmountToSell] = useState(0);
+  const [typeOfTransaction, setTypeOfTransaction] = useState('purchase');
   const { handleSubmit } = useForm();
   useEffect(() => {
     if (router.isReady) {
@@ -166,11 +168,12 @@ const MarketData = () => {
   //make the post req to the transaction api
   const onSubmit = async () => {
     const body = {
-      amount,
+      amount: amount !== 0 ? amount : amountToSell,
       currency: crypto.name.toLowerCase(),
       email: session.data.user.email,
+      type: amount > 0 ? 'purchase' : 'sale',
     };
-    console.log(session);
+    console.log(body);
     const response = await fetch('/api/transactions', {
       method: 'POST',
       body: JSON.stringify(body),
@@ -178,6 +181,7 @@ const MarketData = () => {
         'Content-Type': 'application/json',
       },
     });
+    console.log(response);
     if (response.status === 201) {
       console.log('success');
     }
@@ -333,6 +337,33 @@ const MarketData = () => {
                   className='w-full px-4 py-2 text-base font-semibold text-white transition duration-200 ease-in bg-pink-500 rounded-lg hover:bg-pink-400 focus:outline-none focus:shadow-outline'
                   type='submit'
                   value='Buy'
+                />
+              </div>
+            </div>
+          </form>
+          <hr></hr>
+          <form className='w-full mx-auto' onSubmit={handleSubmit(onSubmit)}>
+            <div className='flex flex-wrap -mx-3 mb-6'>
+              <div className='w-full px-3 mb-6 md:mb-2'></div>
+            </div>
+            <div className='flex flex-wrap -mx-3 mb-6'>
+              <div className='w-full px-3'>
+                <input
+                  className='w-full px-4 py-2 text-base text-gray-700 placeholder-gray-500 border rounded-lg focus:outline-none focus:shadow-outline'
+                  id='grid-amount'
+                  type='number'
+                  placeholder='50$'
+                  required={true}
+                  onChange={(e) => setAmountToSell(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3 mb-6'>
+              <div className='w-full px-3'>
+                <input
+                  className='w-full px-4 py-2 text-base font-semibold text-white transition duration-200 ease-in bg-pink-500 rounded-lg hover:bg-pink-400 focus:outline-none focus:shadow-outline'
+                  type='submit'
+                  value='Sell'
                 />
               </div>
             </div>
