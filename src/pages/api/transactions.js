@@ -64,7 +64,11 @@ async function handleGET(req, res, session, query) {
 
 //POST-> create a new transaction
 async function handlePOST(req, res, session) {
-  const { amount, currency, email } = req.body;
+  const { amount, currency, email, type } = req.body;
+  const response = await fetch(`https://api.coincap.io/v2/assets/${currency}`);
+  const data = await response.json();
+  const cryptoPrice = data.data.priceUsd;
+  const cryptoQuantity = amount / cryptoPrice;
   const wallet = await prisma.User.findUnique({
     where: {
       email: email,
@@ -81,31 +85,62 @@ async function handlePOST(req, res, session) {
   });
   if (!wallet.Wallet)
     return res.status(404).json({ message: 'Wallet not found' });
-  if (wallet.Wallet.balance < amount / 1) {
-    return res.status(403).json({ success: false });
+  if (type === 'sale') {
+    const totalQuantity = await prisma.Transaction.groupBy({
+      by: ['currency'],
+      where: {
+        walletId: wallet.Wallet.id,
+        currency: currency,
+      },
+      _sum: {
+        amount: true,
+      },
+    });
+    if (Math.abs(cryptoQuantity) > totalQuantity[0]._sum.amount) {
+      return res.status(403).json({ success: false });
+    }
+    //create new transaction
+    const newTransaction = await prisma.Transaction.create({
+      data: {
+        amount: -cryptoQuantity,
+        currency: currency,
+        walletId: wallet.Wallet.id,
+      },
+    });
+    //update wallet balance
+    const updatedWallet = await prisma.Wallet.update({
+      where: {
+        id: wallet.Wallet.id,
+      },
+      data: {
+        balance: wallet.Wallet.balance + amount / 1,
+      },
+    });
+    res.status(201).json({ success: true });
   }
-  const response = await fetch(`https://api.coincap.io/v2/assets/${currency}`);
-  const data = await response.json();
-  const cryptoPrice = data.data.priceUsd;
-  const cryptoQuantity = amount / cryptoPrice;
-  //create new transaction
-  const newTransaction = await prisma.Transaction.create({
-    data: {
-      amount: cryptoQuantity,
-      currency: currency,
-      walletId: wallet.Wallet.id,
-    },
-  });
-  //update wallet balance
-  const updatedWallet = await prisma.Wallet.update({
-    where: {
-      id: wallet.Wallet.id,
-    },
-    data: {
-      balance: wallet.Wallet.balance - amount / 1,
-    },
-  });
-  res.status(201).json({ success: true });
+  if (type === 'purchase') {
+    if (wallet.Wallet.balance < amount / 1) {
+      return res.status(403).json({ success: false });
+    }
+    //create new transaction
+    const newTransaction = await prisma.Transaction.create({
+      data: {
+        amount: cryptoQuantity,
+        currency: currency,
+        walletId: wallet.Wallet.id,
+      },
+    });
+    //update wallet balance
+    const updatedWallet = await prisma.Wallet.update({
+      where: {
+        id: wallet.Wallet.id,
+      },
+      data: {
+        balance: wallet.Wallet.balance - amount / 1,
+      },
+    });
+    res.status(201).json({ success: true });
+  }
 }
 
 export default async function handler(req, res) {
