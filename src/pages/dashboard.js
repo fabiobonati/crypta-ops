@@ -299,10 +299,10 @@ const Dashboard = () => {
                         </td>
                         <td className='p-4'>
                           <p className='text-lg font-semibold'>
-                            {calculateTotalAmount(currency)}
+                            {calculateTotalAmount(currency).toFixed(7)}
                           </p>
                         </td>
-                        <td className='p-4 max-w-1/3'>
+                        <td className='p-4 max-w-1/3 hidden md:table-cell'>
                           <p className='text-lg font-semibold'>
                             {cryptoData.map((crypto) => {
                               if (crypto.id === currency) {
